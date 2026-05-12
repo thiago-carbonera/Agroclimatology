@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Carregar planilha de clima
-df_clima = pd.read_csv('agroclimatologia_completa.csv')
+df_clima = pd.read_csv('agroclimatologia_completa_2018_2025.csv')
 
 # Garantir que data seja formato de tempo
 df_clima['data'] = pd.to_datetime(df_clima['data'])
@@ -58,6 +58,6 @@ mapeamento_numerico = {'La Nina': -1, 'Neutro': 0, 'El Nino': 1}
 df_clima['fenomeno_enso_numerico'] = df_clima['fenomeno_enso'].map(mapeamento_numerico)
 
 # Salvar a nova versão da planilha
-df_clima.to_csv('agroclimatologia_enso_2018_2025.csv', index=False)
+df_clima.to_csv('agroclimatologia_completa.csv', index=False)
 
 print("Sensacional! Coluna de El Niño/La Niña adicionada com sucesso.")
