@@ -16,7 +16,7 @@ O projeto trabalha com dados em nível municipal, com integração temporal entr
 - Dados de produtividade de soja por município (IBGE/SIDRA - PAM).
 - Classificação ENSO para enriquecer o conjunto de variáveis.
 
-## 🔗 Fontes de Dados
+## Fontes de Dados
 
 Os dados brutos foram extraídos de fontes públicas e bases abertas, garantindo transparência e reprodutibilidade:
 
