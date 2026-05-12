@@ -1,0 +1,22 @@
+# Arquivos de planilha
+*.csv
+*.xlsx
+
+# Arquivos python
+__pycache__/
+.DS_Store
+
+# Ambientes virtuais Python
+.venv/
+venv/
+env/
+
+# Arquivos de configuração locais
+.env
+
+# Arquivos de editor/IDE
+.vscode/
+.idea/
+
+# Pasta dos srtigos relacionados
+Artigos Relacionados/
