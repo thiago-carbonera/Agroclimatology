@@ -1,8 +1,8 @@
 import pandas as pd
 
 # Carregar as duas planilhas
-df_clima_antigo = pd.read_csv('agroclimatology.csv')
-df_clima_novo = pd.read_csv('agroclimatology_2021_2025.csv')
+df_clima_antigo = pd.read_csv('Data/agroclimatology.csv')
+df_clima_novo = pd.read_csv('Data/agroclimatology_2021_2025.csv')
 
 # Salvar a ordem das colunas da planilha nova
 ordem_padrao = df_clima_novo.columns.tolist()
@@ -23,6 +23,6 @@ df_clima_completo = df_clima_completo.sort_values(by=['data', 'codigo_ibge'])
 df_clima_completo = df_clima_completo.drop_duplicates(subset=['data', 'codigo_ibge'], keep='last')
 
 # Salvar o DataFrame unificado
-df_clima_completo.to_csv('agroclimatologia_completa_2018_2025.csv', index=False)
+df_clima_completo.to_csv('Data/agroclimatologia_completa_2018_2025.csv', index=False)
 
 print("Sucesso! Planilhas unificadas, datas ajustadas e todos os municípios preservados.")

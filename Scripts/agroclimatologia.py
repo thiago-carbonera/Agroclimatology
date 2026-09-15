@@ -38,7 +38,7 @@ vars_2 = [
 
 # Carregar coordenadas dos municípios
 try:
-    df_base = pd.read_csv("agroclimatology.csv")
+    df_base = pd.read_csv("Data/agroclimatology.csv")
     municipios = df_base[['codigo_ibge', 'latitude', 'longitude']].drop_duplicates()
 except FileNotFoundError:
     print("Erro: Arquivo 'agroclimatology.csv' não encontrado.")
@@ -75,5 +75,5 @@ for index, row in municipios.iterrows():
 # Salva o resultado final
 if novos_dados:
     final_df = pd.concat(novos_dados)
-    final_df.to_csv("agroclimatology_2021_2025.csv", index=False)
+    final_df.to_csv("Data/agroclimatology_2021_2025.csv", index=False)
     print(f"\n--- SUCESSO! ---\nArquivo 'agroclimatology_2021_2025.csv' com {len(final_df)} linhas gerado.")

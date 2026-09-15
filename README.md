@@ -1,41 +1,63 @@
 # Agroclimatology
 
-Repositório com os scripts do TCC em Ciência da Computação focado em predição de produtividade da soja no estado do Paraná, a partir de dados agroclimáticos e variáveis macroclimáticas (ENSO).
+Repositório com os scripts desenvolvidos no Trabalho de Conclusão de Curso (TCC) em Ciência da Computação, cujo objetivo é apoiar a atualização, a preparação e o enriquecimento de dados utilizados na predição da produtividade da soja no estado do Paraná.
+
+O projeto utiliza dados agroclimáticos diários, séries históricas de produtividade agrícola municipal e informações macroclimáticas relacionadas ao fenômeno ENSO (*El Niño–Oscilação Sul*). O conjunto consolidado serve como base para a etapa de engenharia de atributos (*Feature Engineering*), aplicação de janelamento temporal e treinamento de modelos de aprendizado de máquina (*Machine Learning*).
+
+A versão modificada e ampliada dos dados utilizada na pesquisa pode ser referenciada como **AgroClima-PR**.
 
 ## Objetivo
-Construir uma base consolidada para modelagem preditiva em séries temporais, cruzando:
 
-- variáveis climáticas históricas (features);
-- produtividade agrícola municipal (target);
-- sinal climático de El Nino/La Nina (feature de contexto).
+Atualizar e preparar um conjunto de dados público de agroclimatologia e produtividade agrícola, ampliando sua cobertura temporal e incorporando informações macroclimáticas para estudos de modelagem preditiva da produtividade da soja no Paraná.
+
+As principais etapas contempladas são:
+* Atualização das séries históricas de produtividade da soja (IBGE/PAM);
+* Ampliação da cobertura temporal dos dados agroclimáticos diários (NASA POWER);
+* Inclusão e mapeamento de anomalias oceânicas relacionadas ao fenômeno ENSO (índice ONI);
+* Padronização, limpeza e alinhamento espaço-temporal das tabelas;
+* Preparação da estrutura de dados para janelamento e modelagem preditiva supervisionada.
 
 ## Escopo dos Dados
-O projeto trabalha com dados em nível municipal, com integração temporal entre diferentes fontes.
 
-- Dados agroclimáticos diários (NASA POWER).
-- Dados de produtividade de soja por município (IBGE/SIDRA - PAM).
-- Classificação ENSO para enriquecer o conjunto de variáveis.
+O projeto opera em nível municipal e integra bases com diferentes granularidades temporais:
 
-## 🔗 Fontes de Dados
+* **Tabela de Produtividade Agrícola (`target`):** Apresenta os valores anuais de produtividade da soja por município, expressos em quilogramas por hectare (kg/ha).
+* **Tabela Agroclimática (`features`):** Reúne observações meteorológicas e ambientais diárias associadas aos municípios paranaenses.
+* **Variáveis Macroclimáticas (ENSO):** Informação complementar às variáveis meteorológicas locais. No processo de previsão com janelamento, a condição mais recente no momento da predição é empregada como atributo de contexto.
 
-Os dados brutos foram extraídos de fontes públicas e bases abertas, garantindo transparência e reprodutibilidade:
+As tabelas permanecem estruturalmente isoladas e são unificadas durante o pipeline por meio do código do município (`codigo_ibge`) e do ano de safra correspondente.
 
-- **Produtividade da Soja (Target — 2018-2024):** Dados anuais de rendimento médio (kg/ha) a nível municipal, obtidos através do Instituto Brasileiro de Geografia e Estatística (IBGE), via pesquisa Produção Agrícola Municipal (PAM). Extração feita através do sistema SIDRA, [Tabela 5457](https://sidra.ibge.gov.br/tabela/5457), com filtro para soja, área colhida em hectares, por município.
-- **Dados Agroclimáticos (Features — 2021 em diante):** Séries temporais climáticas diárias do estado do Paraná, coletadas via API NASA POWER. O script `agroclimatologia.py` realiza a coleta automatizada.
-- **Dataset Base Histórico (Features e Target — até 2017):** Dados históricos de agroclimatologia e produtividade, obtidos a partir de dataset público no Kaggle: [Agroclimatology Data of the State of Paraná, Brazil](https://www.kaggle.com/datasets/hugovallejo/agroclimatology-data-of-the-state-of-paran-br).
+## Fontes de Dados
 
-## Tecnologias
-- Python
-- pandas
-- numpy
-- requests
+Os dados brutos provêm de fontes públicas e abertas, assegurando total transparência e reprodutibilidade:
+
+* **Produtividade da Soja (Target — até 2024):** Extraída via [SIDRA / IBGE](https://sidra.ibge.gov.br/tabela/5457) a partir da Pesquisa Agrícola Municipal (PAM - Tabela 5457), considerando a área colhida e o rendimento médio da soja nos municípios do Paraná.
+* **Dados Agroclimáticos (Features — até 2025):** Séries meteorológicas diárias obtidas através da API da plataforma [NASA POWER](https://power.larc.nasa.gov/data-access-viewer/) via script automatizado.
+* **Dataset Base de Referência:** Ponto de partida disponível no Kaggle: [Agroclimatology Data of the State of Paraná, Brazil](https://www.kaggle.com/datasets/hugovallejo/agroclimatology-data-of-the-state-of-paran-br) (Vallejo et al.).
+* **Índice ENSO:** Classificações obtidas com base nas anomalias do *Oceanic Niño Index* (ONI) disponibilizadas pela [NOAA](https://origin.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ONI_v5.php).
+
+### Codificação ENSO
+
+O fenômeno é integrado à tabela agroclimática sob duas representações (`fenomeno_enso` e `fenomeno_enso_numerico`):
+
+| Condição ENSO | Valor Numérico |
+| La Niña | `-1` |
+| Neutro | `0` |
+| El Niño | `1` |
 
 ## Estrutura do Repositório
-- `agroclimatologia.py`: coleta dados diários da API NASA POWER em lotes de variáveis e gera `agroclimatology_2021_2025.csv`.
-- `concat_agroclimatologia.py`: concatena bases climáticas antiga e nova, padroniza data, ordena e remove duplicatas.
-- `classificar_enso.py`: adiciona colunas de classificação ENSO categórica e numérica ao dataset climático.
-- `limpeza_produtividade.py`: limpa os arquivos de produtividade de 2018 a 2024, renomeia colunas e filtra apenas municípios do Paraná.
-- `concat_producao.py`: concatena em lote os dados anuais de produtividade e consolida no dataset histórico.
+
+```text
+Agroclimatology/
+├── Scripts/
+│   ├── agroclimatologia.py        # Coleta de dados via API NASA POWER
+│   ├── concat_agroclimatologia.py # Concatenação, ordenação e limpeza de duplicatas climáticas
+│   ├── classificar_enso.py        # Integração e mapeamento do fenômeno ENSO
+│   ├── limpeza_produtividade.py   # Limpeza e padronização das planilhas anuais do IBGE
+│   └── concat_producao.py         # Consolidação da série histórica de produtividade
+├── .gitignore                     # Filtro de arquivos binários, venv e datasets
+├── README.md                      # Documentação do projeto
+└── requirements.txt               # Dependências do projeto
 
 ## Requisitos
 - Python 3.10+
@@ -69,32 +91,32 @@ Abaixo está o fluxo sugerido. Ajuste nomes de arquivos conforme sua base local.
 1. Coletar/atualizar dados climáticos:
 
 ```bash
-python agroclimatologia.py
+python Scripts/agroclimatologia.py
 ```
 
 2. Concatenar histórico climático:
 
 ```bash
-python concat_agroclimatologia.py
+python Scripts/concat_agroclimatologia.py
 ```
 
 3. Enriquecer com ENSO:
 
 ```bash
-python classificar_enso.py
+python Scripts/classificar_enso.py
 ```
 
 4. Limpar a base anual de produtividade:
 
 ```bash
-python limpeza_produtividade.py
+python Scripts/limpeza_produtividade.py
 ```
 
 5. Consolidar produtividade histórica:
 
 ```bash
-python concat_producao.py
+python Scripts/concat_producao.py
 ```
 
 ## Reprodutibilidade
-Arquivos grandes de dados (`*.csv`, `*.xlsx`) podem ficar fora do repositório remoto para evitar limite de tamanho. O foco deste repositório é manter a lógica de coleta, limpeza e preparação dos dados.
+Arquivos grandes de dados (`*.csv`, `*.xlsx`)  ficar fora do repositório remoto para evitar limite de tamanho. O foco deste repositório é manter a lógica de coleta, limpeza e preparação dos dados.

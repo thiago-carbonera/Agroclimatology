@@ -18,5 +18,7 @@ env/
 .vscode/
 .idea/
 
-# Pasta dos srtigos relacionados
+# Pasta dos srtigos relacionados, imagens e do dataset completo
 Artigos Relacionados/
+Imagens/
+Data/
