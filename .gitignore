@@ -22,3 +22,13 @@ env/
 Artigos Relacionados/
 Imagens/
 Data/
+
+# Scripts auxiliares e experimentais da auditoria e teste cego
+Scripts/executar_teste_cego_definitivo.py
+Scripts/pipeline_final_consolidado.py
+Scripts/exp1_tendencia_historica.py
+Scripts/exp2_estresse_climatico.py
+Scripts/exp3_representacao_municipios.py
+Scripts/run_baseline_validation.py
+
+relatorio_final_consolidado.md
